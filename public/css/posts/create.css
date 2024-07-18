@@ -1,0 +1,18 @@
+main form>div:first-child {
+    display: grid;
+    justify-items: center;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    column-gap: 40px;
+    row-gap: 32px;
+    align-items: center;
+}
+
+main textarea {
+    outline: none;
+    background: none;
+    border: 1px solid #167250;
+    resize: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 8px;
+}
