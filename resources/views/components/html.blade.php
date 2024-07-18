@@ -6,7 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $tituloPagina }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+    @vite('resources/css/app.css')
+    {{-- @vite('resources/css/app.css') --}}
     <link href="{{ asset('fontawesome/css/fontawesome.css') }}" rel="stylesheet" />
     <link href="{{ asset('fontawesome/css/brands.css') }}" rel="stylesheet" />
     <link href="{{ asset('fontawesome/css/solid.css') }}" rel="stylesheet" />
