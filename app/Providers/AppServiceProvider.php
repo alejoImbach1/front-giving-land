@@ -27,12 +27,26 @@ class AppServiceProvider extends ServiceProvider
                 'Accept' => 'application/json',
             ])->get('http://127.0.0.1:8000/v1/user')->successful();
         });
-        Blade::if('owner', function ($username) {
-            return auth()->check() && auth()->user()->username === $username;
+
+        Blade::if('backguest', function () {
+            return !Http::withHeaders([
+                'Authorization' => 'Bearer ' . session('auth_token'),
+                'Accept' => 'application/json',
+            ])->get('http://127.0.0.1:8000/v1/user')->successful();
         });
 
-        Blade::if('notOwner', function ($username) {
-            return auth()->check() && auth()->user()->username != $username;
+        Http::macro('authtoken', function () {
+            return Http::withHeaders([
+                'Authorization' => 'Bearer ' . session('auth_token'),
+                'Accept' => 'application/json',
+            ])->baseUrl(env('api_url'));
         });
+        // Blade::if('owner', function ($username) {
+        //     return auth()->check() && auth()->user()->username === $username;
+        // });
+
+        // Blade::if('notOwner', function ($username) {
+        //     return auth()->check() && auth()->user()->username != $username;
+        // });
     }
 }

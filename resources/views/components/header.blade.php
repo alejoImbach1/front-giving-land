@@ -1,5 +1,21 @@
-@props(['user' => auth()->user()])
-<div {{ $attributes->merge(['class' => 'z-40 fixed top-0 py-2 bg-gris-claro w-full']) }}>
+@php
+    use Illuminate\Support\Facades\Http;
+    $response = Http::authtoken()->get('/user');
+
+    $user = $response->successful() ? $response->object() : null;
+
+@endphp
+
+@backauth
+    @php
+        $profile = Http::acceptJson()
+        ->get(env('api_url') . '/profiles' . '/' . $user->id)
+        ->object();
+        $imageUrl = Http::acceptJson()->get(env('api_url') . '/profile-image' . '/' . $profile->id)->json();
+        // dd($imageUrl);
+    @endphp
+@endbackauth
+<div {{ $attributes->class(['z-40 fixed top-0 py-2 bg-gris-claro w-full']) }}>
     <div class="navigation-header screen-size">
         {{-- Logo --}}
         <a class="flex items-center" href="{{ route('home') }}">
@@ -21,31 +37,29 @@
 
         {{-- autenticado --}}
         <div class="navigation-header-options relative">
-            @auth
+            @backauth
                 <div class="dropdown relative">
-                    <img class="size-10 redondo cursor-pointer dropdown-button"
-                        src="{{ $user->profile->getImageUrl() }}"
-                        alt="">
+                    <img class="size-10 redondo cursor-pointer dropdown-button" src="{{ $imageUrl }}" alt="">
                     <div class="dropdown-menu absolute right-0 mt-2 w-56 top-8 rounded-md bg-white shadow-lg hidden">
                         <div class="py-1">
                             <a href="{{ route('profile.show', $user->username) }}"
                                 class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">Perfil</a>
                             <hr>
-                            <form method="POST" action={{ route('app.logout') }}>
+                            <form method="POST" action={{ route('logout') }}>
                                 @csrf
                                 <a onclick="this.closest('form').submit()" type="submit"
-                                    class="text-gray-700 block w-full px-4 py-2 text-left text-sm cursor-pointer hover:bg-gray-100">Signout</a>
+                                    class="text-gray-700 block w-full px-4 py-2 text-left text-sm cursor-pointer hover:bg-gray-100">Cerrar
+                                    sesión</a>
                             </form>
                         </div>
                     </div>
                 </div>
-
-            @endauth
-            @guest
-                <a class="boton-base verde-blanco ps-3 pe-3 pt-1 pb-1 me-2" href={{ route('login.index') }}>Inicio
+            @endbackauth
+            @backguest
+                <a class="boton-base verde-blanco ps-3 pe-3 pt-1 pb-1 me-2" href={{ route('login') }}>Inicio
                     sesion</a>
-                <a class="boton-base verde-blanco ps-3 pe-3 pt-1 pb-1" href={{ route('signup.index') }}>Registro</a>
-            @endguest
+                <a class="boton-base verde-blanco ps-3 pe-3 pt-1 pb-1" href={{ route('login') }}>Registro</a>
+            @endbackguest
         </div>
 
     </div>

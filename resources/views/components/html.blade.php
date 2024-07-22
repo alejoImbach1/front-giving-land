@@ -6,30 +6,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $tituloPagina }}</title>
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
-    @vite('resources/css/app.css')
-    {{-- @vite('resources/css/app.css') --}}
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="{{ asset('fontawesome/css/fontawesome.css') }}" rel="stylesheet" />
     <link href="{{ asset('fontawesome/css/brands.css') }}" rel="stylesheet" />
     <link href="{{ asset('fontawesome/css/solid.css') }}" rel="stylesheet" />
-    @livewireStyles
     <link rel="stylesheet" href={{ asset('css/global.css') }}>
     <link rel="icon" type="image/svg+xml" href="{{ asset('appicons/logo-sm.svg') }}">
-    <script src={{ asset('js/global.js') }}></script>
     @stack('links')
+    @livewireStyles
+    <script src={{ asset('js/global.js') }}></script>
 </head>
 
 <body>
-    {{-- <livewire:alert />
+    {{-- <livewire:alert /> --}}
     @session('alert')
-        <x-alert :type="$value['type']" :message="$value['message']" id="divAlert" />
-    @endsession --}}
+        <div class="z-50 bg-red-500 w-10 h-10">Hello</div>
+        {{-- <x-alert :type="$value['type']" :message="$value['message']" id="div_alert" /> --}}
+    @endsession
     {{ $slot }}
     @stack('modals')
-
-    @livewireScripts
-
     @stack('scripts')
+    @livewireScripts
 </body>
 
 </html>
