@@ -41,6 +41,10 @@ class AppServiceProvider extends ServiceProvider
                 'Accept' => 'application/json',
             ])->baseUrl(env('api_url'));
         });
+
+        Http::macro('backend', function () {
+            return Http::acceptJson()->baseUrl(env('api_url'));
+        });
         // Blade::if('owner', function ($username) {
         //     return auth()->check() && auth()->user()->username === $username;
         // });

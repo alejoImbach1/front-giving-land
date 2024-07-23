@@ -30,7 +30,7 @@
             </ul>
         </div>
         {{-- posts --}}
-        {{-- <livewire:home-posts /> --}}
+        <livewire:home-posts />
         
         {{-- publicidad lateral --}}
         <x-publicidad-lateral />
