@@ -25,14 +25,14 @@ class AppServiceProvider extends ServiceProvider
             return Http::withHeaders([
                 'Authorization' => 'Bearer ' . session('auth_token'),
                 'Accept' => 'application/json',
-            ])->get('http://127.0.0.1:8000/v1/user')->successful();
+            ])->get(env('api_url') . '/user')->successful();
         });
 
         Blade::if('backguest', function () {
             return !Http::withHeaders([
                 'Authorization' => 'Bearer ' . session('auth_token'),
                 'Accept' => 'application/json',
-            ])->get('http://127.0.0.1:8000/v1/user')->successful();
+            ])->get(env('api_url') . '/user')->successful();
         });
 
         Http::macro('authtoken', function () {

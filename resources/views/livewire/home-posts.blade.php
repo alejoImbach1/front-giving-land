@@ -1,6 +1,6 @@
-@php
+{{-- @php
     dd($posts)
-@endphp
+@endphp --}}
 <div class="flex flex-wrap gap-4">
     @foreach ($posts as $post)
         <div class="p-4 border border-red-900">
