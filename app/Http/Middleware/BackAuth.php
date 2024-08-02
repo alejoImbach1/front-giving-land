@@ -16,10 +16,7 @@ class BackAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Http::withHeaders([
-            'Authorization' => 'Bearer ' . session('auth_token'),
-            'Accept' => 'application/json',
-        ])->get('http://127.0.0.1:8000/v1/user')->successful()) {
+        if (Http::authtoken()->get('/user')->failed()) {
             return redirect('/login');
         }
         return $next($request);

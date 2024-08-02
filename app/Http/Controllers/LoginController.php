@@ -26,10 +26,14 @@ class LoginController extends Controller implements HasMiddleware
 
     public function attempt(LoginRequest $request)
     {
-        $response = Http::acceptJson()->post(env('api_url') . '/login', $request->only(['email', 'password']));
+        $response = Http::backapi()->post('/login', $request->validated());
 
-        if (!$response->successful()) {
+        if ($response->unauthorized()) {
             return back()->withErrors(['email' => 'El correo o la contraseña son incorrectos'])->onlyInput('email');
+        }
+
+        if($response->failed()){
+            return to_route('login');
         }
 
         // Auth::login(User::find($response->json()['user']['id']));

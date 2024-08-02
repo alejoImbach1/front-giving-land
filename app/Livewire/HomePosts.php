@@ -12,7 +12,7 @@ class HomePosts extends Component
 
     public function mount()
     {
-        $this->posts = Http::backend()->get('/posts')->collect()->sortDesc();
+        $this->posts = Http::backapi()->get('/posts')->collect()->sortDesc();
     }
 
     public function render()

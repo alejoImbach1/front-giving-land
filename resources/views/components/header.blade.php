@@ -4,14 +4,15 @@
 
     $user = $response->successful() ? $response->object() : null;
 
+    // dd($user->id);
+
 @endphp
 
 @backauth
     @php
-        $profile = Http::acceptJson()
-        ->get(env('api_url') . '/profiles' . '/' . $user->id)
-        ->object();
-        $imageUrl = Http::acceptJson()->get(env('api_url') . '/profile-image' . '/' . $profile->id)->json();
+        $profile = Http::backapi()->get('/profiles/' . $user->id,)->object();
+        // dd($profile);
+        $imageUrl = Http::backapi()->get('/profile-image/' . $profile->id,)->json();
         // dd($imageUrl);
     @endphp
 @endbackauth
@@ -58,7 +59,7 @@
             @backguest
                 <a class="boton-base verde-blanco ps-3 pe-3 pt-1 pb-1 me-2" href={{ route('login') }}>Inicio
                     sesion</a>
-                <a class="boton-base verde-blanco ps-3 pe-3 pt-1 pb-1" href={{ route('login') }}>Registro</a>
+                <a class="boton-base verde-blanco ps-3 pe-3 pt-1 pb-1" href={{ route('register') }}>Registro</a>
             @endbackguest
         </div>
 

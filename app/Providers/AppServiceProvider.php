@@ -21,18 +21,25 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Blade::if('backauth', function () {
-            return Http::withHeaders([
-                'Authorization' => 'Bearer ' . session('auth_token'),
-                'Accept' => 'application/json',
-            ])->get(env('api_url') . '/user')->successful();
+        // Blade::if('backauth', function () {
+        //     return Http::withHeaders([
+        //         'Authorization' => 'Bearer ' . session('auth_token'),
+        //         'Accept' => 'application/json',
+        //     ])->get(env('api_url') . '/user')->successful();
+        // });
+
+        // Blade::if('backguest', function () {
+        //     return !Http::withHeaders([
+        //         'Authorization' => 'Bearer ' . session('auth_token'),
+        //         'Accept' => 'application/json',
+        //     ])->get(env('api_url') . '/user')->successful();
+        // });
+        Blade::if('backauth',function(){
+            return Http::authtoken()->get('/user')->successful();
         });
 
-        Blade::if('backguest', function () {
-            return !Http::withHeaders([
-                'Authorization' => 'Bearer ' . session('auth_token'),
-                'Accept' => 'application/json',
-            ])->get(env('api_url') . '/user')->successful();
+        Blade::if('backguest',function(){
+            return Http::authtoken()->get('/user')->failed();
         });
 
         Http::macro('authtoken', function () {
@@ -42,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
             ])->baseUrl(env('api_url'));
         });
 
-        Http::macro('backend', function () {
+        Http::macro('backapi', function () {
             return Http::acceptJson()->baseUrl(env('api_url'));
         });
         // Blade::if('owner', function ($username) {

@@ -20,8 +20,8 @@
 <body>
     {{-- <livewire:alert /> --}}
     @session('alert')
-        <div class="z-50 bg-red-500 w-10 h-10">Hello</div>
-        {{-- <x-alert :type="$value['type']" :message="$value['message']" id="div_alert" /> --}}
+        {{-- <div class="z-50 bg-red-500 w-10 h-10">Hello</div> --}}
+        <x-alert :type="$value['type']" :message="$value['message']" id="div_alert" />
     @endsession
     {{ $slot }}
     @stack('modals')
