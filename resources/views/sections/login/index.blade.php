@@ -23,7 +23,7 @@
 
             <div class="flex flex-col">
                 <button class="boton-base verde-blanco mb-4" type="submit">Iniciar sesión</button>
-                <a href="/google-auth/redirect"
+                <a href="{{route('auth.google')}}"
                     class="boton-base blanco-gris w-full flex justify-center items-center shadow-sm">
                     <img class="size-7" src="{{ asset('appicons/icon-google.svg') }}" alt="">
                     <p class="text-base ml-2">Iniciar con Google</p>

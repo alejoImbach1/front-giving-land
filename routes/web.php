@@ -40,7 +40,10 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('/register','attempt')->name('register.attempt');
 });
 
-Route::get('/google-auth',[GoogleAuthController::class,'handleCallback'])->name('auth.google');
+Route::controller(GoogleAuthController::class)->group(function(){
+    Route::get('/google-auth/redirect','redirectToGoogle')->name('auth.google');
+    Route::get('/google-auth/callback','handleCallback');
+});
 
 Route::resource('posts',PostController::class)->only('show','create','edit');
 
