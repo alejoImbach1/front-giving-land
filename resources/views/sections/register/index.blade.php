@@ -25,7 +25,7 @@
 
             <div class="flex flex-col mt-10">
                 <button class="boton-base verde-blanco mb-4" type="submit">Registrarse</button>
-                <a href="/google-auth/redirect"
+                <a href="{{route('auth.google')}}"
                     class="boton-base blanco-gris w-full flex justify-center items-center shadow-sm">
                     <img class="size-7" src="{{ asset('appicons/icon-google.svg') }}" alt="">
                     <p class="text-base ml-2">Registrarse con Google</p>
