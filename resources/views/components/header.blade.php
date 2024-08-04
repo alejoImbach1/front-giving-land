@@ -1,18 +1,14 @@
 @php
-    use Illuminate\Support\Facades\Http;
-    $response = Http::authtoken()->get('/user');
+    $response = Illuminate\Support\Facades\Http::authtoken()->get('/user',['included' => 'profile.image']);
 
-    $user = $response->successful() ? $response->object() : null;
-
-    // dd($user->id);
-
+    $authUser = $response->successful() ? $response->object() : null;
 @endphp
 
 @backauth
     @php
-        $profile = Http::backapi()->get('/profiles/' . $user->id,)->object();
+        $profile = $authUser->profile;
         // dd($profile);
-        $imageUrl = Http::backapi()->get('/profile-image/' . $profile->id,)->json();
+        $imageUrl = $profile->image ? env('back_public_storage') . '/' . $profile->image->url : $profile->google_avatar;
         // dd($imageUrl);
     @endphp
 @endbackauth
@@ -43,7 +39,7 @@
                     <img class="size-10 redondo cursor-pointer dropdown-button" src="{{ $imageUrl }}" alt="">
                     <div class="dropdown-menu absolute right-0 mt-2 w-56 top-8 rounded-md bg-white shadow-lg hidden">
                         <div class="py-1">
-                            <a href="{{ route('profile.show', $user->username) }}"
+                            <a href="{{ route('profiles.show', $authUser->username) }}"
                                 class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">Perfil</a>
                             <hr>
                             <form method="POST" action={{ route('logout') }}>

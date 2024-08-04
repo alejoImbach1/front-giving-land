@@ -3,7 +3,7 @@
         <a href="{{route('login')}}" class="boton-base verde-blanco">Inicio de sesión</a>
     </x-simple-header>
 
-    <div class="h-screen pt-16 grid place-items-center px-4 w-full">
+    <main class="h-screen pt-16 grid place-items-center px-4 w-full">
         <x-form ruta-siguiente="register.attempt" class="auth-form bg-gris-claro">
             <h2 class="text-center texto-verde text-3xl mb-6">Registro</h2>
 
@@ -32,5 +32,5 @@
                 </a>
             </div>
         </x-form>
-    </div>
+    </main>
 </x-html>

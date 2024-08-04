@@ -1,14 +1,15 @@
 <?php
 
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SecurityPrivacy;
 use App\Http\Middleware\BackAuth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
 
 Route::get('/all', function () {
     dd(session()->all());
@@ -45,6 +46,13 @@ Route::controller(GoogleAuthController::class)->group(function(){
     Route::get('/google-auth/callback','handleCallback');
 });
 
-Route::resource('posts',PostController::class)->only('show','create','edit');
+Route::resource('posts',PostController::class)->except('store','update','index');
 
-Route::get('{username}', [ProfileController::class, 'show'])->name('profile.show');
+Route::singleton('profile',ProfileController::class)->only('edit');
+
+Route::resource('favorites',FavoriteController::class)->only('index');
+
+Route::resource('security-privacy',SecurityPrivacy::class)->only('index');
+
+
+Route::get('{username}', [ProfileController::class, 'show'])->name('profiles.show');
