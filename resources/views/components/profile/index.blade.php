@@ -1,3 +1,4 @@
+$@props(['profile','profileImageUrl'])
 <x-app-layout>
     @pushOnce('links')
         <link rel="stylesheet" href="{{ asset('css/profile/index.css') }}">
@@ -6,7 +7,7 @@
 
     <main class="screen-size contenido-main flex justify-center md:justify-between gap-x-4">
         {{-- <livewire:profile.profile-section /> --}}
-        <x-profile.profile-nav />
+        <x-profile.profile-nav :$profile :$profileImageUrl/>
 
         {{ $slot }}
 

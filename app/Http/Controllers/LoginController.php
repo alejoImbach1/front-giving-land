@@ -32,12 +32,15 @@ class LoginController extends Controller implements HasMiddleware
             return back()->withErrors(['email' => 'El correo o la contraseña son incorrectos'])->onlyInput('email');
         }
 
-        if($response->failed()){
+        if ($response->failed()) {
             return to_route('login');
         }
-
         // Auth::login(User::find($response->json()['user']['id']));
         session(['auth_token' => $response->json()['auth_token']]);
+        $auth_user = Http::authtoken()->get('/user', [
+            'included' => 'profile'
+        ])->json();
+        session(compact('auth_user'));
         Utility::viewAlert('success', 'Se inició sesión.');
         return to_route('home');
     }

@@ -16,7 +16,7 @@ class BackGuest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Http::authtoken()->get('/user')->successful()) {
+        if (session()->has('auth_token')) {
             return to_route('home');
         }
         return $next($request);

@@ -1,5 +1,4 @@
-@props(['post'])
-
+@props(['post','favorites'])
 <div class="rounded bg-gris-claro shadow-md w-64 mx-auto">
     <div class="relative w-full h-52 overflow-y-hidden" data-carousel="static">
 
@@ -15,7 +14,7 @@
         </div>
         @backauth
             <div class="absolute top-0 left-0 z-30 m-2">
-                <livewire:favorites.favorite-toggle :post-id="$post['id']" />
+                <livewire:favorites.favorite-toggle :post-id="$post['id']" :$favorites/>
             </div>
         @endbackauth
         @if (count($post['images']) > 1)
@@ -49,10 +48,7 @@
         @endif
     </div>
     @backauth
-        @php
-            $authUser = Illuminate\Support\Facades\Http::authtoken()->get('/user')->json();
-        @endphp
-        @if ($authUser['id'] != $post['user_id'])
+        @if (session('auth_user')['id'] != $post['user_id'])
             <div class="dropdown relative z-30">
                 <i
                     class="fa-solid fa-ellipsis absolute right-0 top-1 text-lg leading-none bg-gray-300 rounded-md px-2 cursor-pointer dropdown-button"></i>

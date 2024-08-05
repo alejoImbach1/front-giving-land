@@ -13,14 +13,26 @@ class ProfileController extends Controller
         if ($response->failed()) {
             return to_route('home');
         }
+
         $user = $response->json();
-        $profile = Http::backapi()->get('/profiles/' . $user['profile']['id'], ['included' => 'image,socialMedia.image,contactInformation'])->json();
-        $posts = Http::backapi()->get('/posts', [
-            'filter[user_id]' => $response->object()->id,
-            'included' => 'images,location,category'
+
+        $profile = Http::backapi()->get('/profiles/' . $user['profile']['id'], [
+            'included' => 'image,socialMedia.image,contactInformation'
         ])->json();
-        // $posts = $profile->user->posts;
-        // dd($posts);
-        return view('sections.profile.show', compact('profile', 'user', 'posts'));
+
+        $posts = Http::backapi()->get('/posts', [
+            'included' => 'images,location,category',
+            'only' => $user['id'],
+            'sort' => '-created_at'
+        ])->json();
+
+        $favorites = session()->has('auth_token') ?
+            Http::backapi()->get('/users/' . session('auth_user')['username'], ['included' => 'favorites'])->json()['favorites'] : null;
+
+        $profileImageUrl = $profile['image']
+            ? env('back_public_storage') . '/' . $profile['image']['url']
+            : $profile['google_avatar'];
+
+        return view('sections.profile.show', compact('user', 'profile', 'posts', 'profileImageUrl' ,'favorites'));
     }
 }

@@ -4,7 +4,7 @@
         @csrf
         <div class="w-full">
             <div id="carousel" class="relative overflow-hidden rounded-lg bg-gray-200 h-80">
-                @if (!count($imagesUrls))
+                @if (!count($images))
                     <label id="big_label_images" for="image_input"
                         class="absolute top-0 left-0 w-full h-full grid place-items-center cursor-pointer">
                         <div>
@@ -14,11 +14,11 @@
                     </label>
                 @endif
                 <div id="images_container" class="h-full flex">
-                    @foreach ($imagesUrls as $imageUrl)
+                    @foreach ($images as $image)
                         @if ($loop->index == $currentShownImageIndex)
                             <div class="relative w-full">
                                 <div class="flex justify-center items-center h-72">
-                                    <img src="{{ asset('storage/' . $imageUrl)}}" class="max-w-fit"
+                                    <img src="{{ $image['url']}}" class="max-w-fit"
                                         style="height: 120%;">
                                 </div>
                                 <i class="fa-solid fa-trash absolute top-2 right-2 bg-red-600 text-white p-2 redondo cursor-pointer"
@@ -27,21 +27,21 @@
                         @endif
                     @endforeach
                 </div>
-                @if (count($this->imagesUrls) > 1 && $this->currentShownImageIndex != array_key_first($this->imagesUrls))
+                @if (count($images) > 1 && $currentShownImageIndex != array_key_first($images))
                     <button type="button" id="prevBtn"
                         class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-1 rounded-full"
                         wire:click='showPreviousImage()'>‹</button>
                 @endif
-                @if (count($this->imagesUrls) > 1 && $this->currentShownImageIndex != array_key_last($this->imagesUrls))
+                @if (count($images) > 1 && $currentShownImageIndex != array_key_last($images))
                     <button type="button" id="nextBtn"
                         class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-1 rounded-full"
                         wire:click='showNextImage()'>›</button>
                 @endif
             </div>
-            @error('imagesUrls')
+            @error('images')
                 <p class="text-red-500">*{{ $message }}</p>
             @enderror
-            @if (count($this->imagesUrls) > 0 && count($this->imagesUrls) < 5)
+            @if (count($images) > 0 && count($images) < 5)
                 <label id="small_label_images" for="image_input"
                     class="boton-base bg-blue-700 text-white inline-block mt-3">Agregar</label>
             @endif
@@ -119,6 +119,7 @@
         </div>
     </div>
     <div class="flex justify-end">
+        {{-- <button wire:click='see()'>See</button> --}}
         <a href="{{ $isCreate ? route('home') : route('home') }}"
             class="boton-base bg-gray-400 mr-6">Cancelar</a>
         <button type="submit" class="boton-base verde-blanco">

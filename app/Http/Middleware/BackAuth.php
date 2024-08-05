@@ -16,7 +16,7 @@ class BackAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Http::authtoken()->get('/user')->failed()) {
+        if (!session()->has('auth_token')) {
             return redirect('/login');
         }
         return $next($request);

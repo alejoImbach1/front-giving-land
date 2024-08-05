@@ -15,6 +15,10 @@ Route::get('/all', function () {
     dd(session()->all());
 });
 
+Route::get('/invalidate', function () {
+    dd(session()->invalidate());
+});
+
 Route::get('/p', function () {
     session()->flash('p','tonces');
     return view('prueba');

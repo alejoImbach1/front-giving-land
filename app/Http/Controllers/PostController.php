@@ -14,7 +14,7 @@ class PostController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(BackAuth::class, only: ['create','destroy']),
+            new Middleware(BackAuth::class, only: ['create','edit','destroy']),
         ];
     }
     public function create()
@@ -22,14 +22,22 @@ class PostController extends Controller implements HasMiddleware
         return view('sections.posts.create');
     }
 
-    public function edit(string $postId)
+    public function edit(string $id)
     {
-        return view('sections.posts.edit');
+        $response = Http::backapi()->get('/posts/' , [
+            'only' => session('auth_user')['id'],
+            'included' => 'images,location,category'
+        ]);
+        if($response->failed() || empty($response->json()) || !$response->collect()->where('id',$id)->first()){
+            return to_route('home');
+        };
+        $post = $response->collect()->where('id',$id)->first();
+        return view('sections.posts.edit',compact('post'));
     }
 
-    public function destroy(string $postId)
+    public function destroy(string $id)
     {
-        $response = Http::authtoken()->delete('/posts/' . $postId);
+        $response = Http::authtoken()->delete('/posts/' . $id);
         if($response->failed()){
             return back();
         }

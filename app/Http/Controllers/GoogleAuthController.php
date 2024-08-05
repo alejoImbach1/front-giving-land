@@ -28,6 +28,10 @@ class GoogleAuthController extends Controller
         }
 
         session(['auth_token' => $response->json()['auth_token']]);
+        $auth_user = Http::authtoken()->get('/user', [
+            'included' => 'profile'
+        ])->json();
+        session(compact('auth_user'));
         Utility::viewAlert('success', 'Se ingresó con google.');
         return to_route('home');
     }

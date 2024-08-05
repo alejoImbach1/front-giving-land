@@ -22,28 +22,27 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::if('backauth',function(){
-            return Http::authtoken()->get('/user')->successful();
+            return session()->has('auth_token');
         });
 
         Blade::if('backguest',function(){
-            return Http::authtoken()->get('/user')->failed();
+            return !session()->has('auth_token');
         });
 
         Blade::if('owner', function ($username) {
-            $response = Http::authtoken()->get('/user');
-            return $response->successful() && $response->object()->username === $username;
+            return session()->has('auth_token') && session('auth_user')['username'] === $username;
         });
 
         Blade::if('notOwner', function ($username) {
-            $response = Http::authtoken()->get('/user');
-            return $response->successful() && $response->object()->username !== $username;
+            return session()->has('auth_token') && session('auth_user')['username'] !== $username;
         });
 
         Http::macro('authtoken', function () {
-            return Http::withHeaders([
-                'Authorization' => 'Bearer ' . session('auth_token'),
-                'Accept' => 'application/json',
-            ])->baseUrl(env('api_url'));
+            // return Http::withHeaders([
+            //     'Authorization' => 'Bearer ' . session('auth_token'),
+            //     'Accept' => 'application/json',
+            // ])->baseUrl(env('api_url'));
+            return Http::withToken(session('auth_token'))->acceptJson()->baseUrl(env('api_url'));
         });
 
         Http::macro('backapi', function () {
