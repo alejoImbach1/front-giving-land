@@ -20,7 +20,7 @@ class ProfilePost extends Component
 
     public function mount()
     {
-        $this->username = request('username');
+        $this->username = request('username') ? request('username') : $this->post['user']['username'];
         $this->deleteDisplayed = false;
     }
 

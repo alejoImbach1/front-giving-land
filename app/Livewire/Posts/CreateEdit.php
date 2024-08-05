@@ -179,6 +179,12 @@ class CreateEdit extends Component
         $requestData['deleted_images_ids'] = $this->deletedInitImagesIds;
         // $updateResponse = Http::authtoken()->attach($multipart)->put('/posts/' . $this->id, $requestData);
         $updateResponse = Http::authtoken()->put('/posts/' . $this->id, $requestData);
+        // if($this->)
+        if(!empty($multipart)){
+            Http::authtoken()->attach($multipart)->post('post/new-images', ['post_id' => $this->id]);
+        }
+        // dd($newImagesResponse->json());
+
         // dd($updateResponse->json());
         Utility::viewAlert($updateResponse->successful() ? 'success' : 'danger', $updateResponse->object()->message);
         Storage::deleteDirectory('public/livewire-tmp');

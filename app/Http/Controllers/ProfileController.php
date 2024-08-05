@@ -29,10 +29,20 @@ class ProfileController extends Controller
         $favorites = session()->has('auth_token') ?
             Http::backapi()->get('/users/' . session('auth_user')['username'], ['included' => 'favorites'])->json()['favorites'] : null;
 
-        $profileImageUrl = $profile['image']
+        $profileImageUrl = !$profile['google_avatar']
             ? env('back_public_storage') . '/' . $profile['image']['url']
-            : $profile['google_avatar'];
+            : $profile['image']['url'];
 
         return view('sections.profile.show', compact('user', 'profile', 'posts', 'profileImageUrl' ,'favorites'));
+    }
+
+    public function edit(){
+        $profile = Http::backapi()->get('/profiles/' . session('auth_user')['profile']['id'],[
+            'included' => 'image,socialMedia.image,contactInformation'
+        ])->json();
+
+        $allSocialMedia = Http::backapi()->get('/social-media',['included' => 'image'])->json();
+        // dd($profile);
+        return view('sections.profile.edit',compact('profile','allSocialMedia'));
     }
 }

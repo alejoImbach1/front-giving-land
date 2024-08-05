@@ -20,7 +20,7 @@ Route::get('/invalidate', function () {
 });
 
 Route::get('/p', function () {
-    session()->flash('p','tonces');
+    // session()->flash('p','tonces');
     return view('prueba');
 });
 
@@ -52,7 +52,7 @@ Route::controller(GoogleAuthController::class)->group(function(){
 
 Route::resource('posts',PostController::class)->except('store','update','index');
 
-Route::singleton('profile',ProfileController::class)->only('edit');
+Route::singleton('profile',ProfileController::class)->only('edit')->middleware(BackAuth::class);
 
 Route::resource('favorites',FavoriteController::class)->only('index');
 

@@ -16,7 +16,7 @@ class GoogleAuthController extends Controller
     public function handleCallback()
     {
         $user_google = Socialite::driver('google')->stateless()->user();
-        // dd($user_google->);
+        // dd($user_google->id);
         $response = Http::backapi()->post('google-login',[
             'name' => $user_google->name,
             'email' => $user_google->email,

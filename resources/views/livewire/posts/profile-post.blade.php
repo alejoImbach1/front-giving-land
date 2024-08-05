@@ -90,24 +90,13 @@
             <p class="font-bold">{{ $post['category']['name'] }}</p>
         @endowner
     </div>
-    {{-- <x-popup-livewire max-width="md" wire:model='deleteDisplayed'>
-        <form class="bg-gris-claro rounded-lg p-8" wire:submit='destroy()'>
-            <div class="flex flex-wrap mb-3 text-lg">
-                ¿Estás segura/o de eliminar&nbsp;<b>{{ $post['name'] }}</b>?
-            </div>
-            <button type="submit" class="boton-base bg-red-500 mr-3">Eliminar</button>
-            <button type="button" class="boton-base bg-gris text-white" x-on:click="show = false">Cancelar</button>
-        </form>
-    </x-popup-livewire> --}}
     <x-popup id="popup_post_{{ $post['id'] }}" max-width='md'>
         <form class="bg-gris-claro rounded-lg p-8" wire:submit='destroy()'>
             <div class="flex flex-wrap mb-3 text-lg">
                 ¿Estás segura/o de eliminar&nbsp;<b>{{ $post['name'] }}</b>?
             </div>
             <button type="submit" class="boton-base bg-red-500 mr-3">Eliminar</button>
-            <button type="button" class="boton-base bg-gris text-white" x-on:click="show = false">Cancelar</button>
+            <button type="button" class="boton-base bg-gris text-white popup-closer">Cancelar</button>
         </form>
     </x-popup>
-    {{-- @if ($deleteDisplayed)
-    @endif --}}
 </div>

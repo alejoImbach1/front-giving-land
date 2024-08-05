@@ -14,9 +14,29 @@ class PostController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(BackAuth::class, only: ['create','edit','destroy']),
+            new Middleware(BackAuth::class, only: ['create', 'edit', 'destroy']),
         ];
     }
+
+    public function show(string $id)
+    {
+        $response = Http::backapi()->get('/posts/' . $id, [
+            'included' => 'images,location,category,user.profile.image'
+        ]);
+
+        if ($response->failed()) {
+            Utility::viewAlert('danger', $response->object()->message);
+            return to_route('home');
+        }
+
+        $post = $response->json();
+
+        $favorites = session()->has('auth_token') ?
+            Http::backapi()->get('/users/' . session('auth_user')['username'], ['included' => 'favorites'])->json()['favorites'] : null;
+
+        return view('sections.posts.show', compact('post', 'favorites'));
+    }
+
     public function create()
     {
         return view('sections.posts.create');
@@ -24,24 +44,26 @@ class PostController extends Controller implements HasMiddleware
 
     public function edit(string $id)
     {
-        $response = Http::backapi()->get('/posts/' , [
+        $response = Http::backapi()->get('/posts/', [
             'only' => session('auth_user')['id'],
             'included' => 'images,location,category'
         ]);
-        if($response->failed() || empty($response->json()) || !$response->collect()->where('id',$id)->first()){
+        if ($response->failed() || empty($response->json()) || !$response->collect()->where('id', $id)->first()) {
+            Utility::viewAlert('danger', 'not found');
             return to_route('home');
         };
-        $post = $response->collect()->where('id',$id)->first();
-        return view('sections.posts.edit',compact('post'));
+        $post = $response->collect()->where('id', $id)->first();
+        return view('sections.posts.edit', compact('post'));
     }
 
     public function destroy(string $id)
     {
         $response = Http::authtoken()->delete('/posts/' . $id);
-        if($response->failed()){
-            return back();
+        if ($response->failed()) {
+            Utility::viewAlert('danger', $response->object()->message);
+            return to_route('home');
         }
-        Utility::viewAlert('success',$response->object()->message);
-        return back();
+        Utility::viewAlert('success', $response->object()->message);
+        return to_route('profiles.show', session('auth_user')['username']);
     }
 }

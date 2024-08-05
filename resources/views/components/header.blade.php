@@ -9,7 +9,7 @@
         $authUser = session('auth_user');
         $profile = Http::backapi()->get('/profiles/' . $authUser['profile']['id'],['included' => 'image']);
         // dd($profile);
-        $imageUrl = $profile['image'] ? env('back_public_storage') . '/' . $profile['image']['url'] : $profile['google_avatar'];
+        $imageUrl = !$profile['google_avatar'] ? env('back_public_storage') . '/' . $profile['image']['url'] : $profile['image']['url'];
         // dd($imageUrl);
     @endphp
 @endbackauth

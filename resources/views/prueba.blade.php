@@ -1,7 +1,9 @@
 <x-html>
-    @session('p')
-        <div>{{$value}}</div>
-    @endsession
-    <x-alert type='success' message="funciona"/>
+    
     <div>hello</div>
+    <form action="{{env('api_url') . '/profile'}}" enctype="multipart/form-data" method="POST">
+        @csrf
+        <input type="file" name="image" id="">
+        <button type="submit">enviar</button>
+    </form>
 </x-html>

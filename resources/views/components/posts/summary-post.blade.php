@@ -61,11 +61,11 @@
             </div>
         @endif
     @endbackauth
-    <div class="px-3 py-4 relative z-20">
-        <a href="" class="text-gray-800 text-xl font-semibold mb-2 w-full block">{{ $post['name'] }}</a>
+    <a href="{{route('posts.show',$post['id'])}}" class="px-3 py-4 relative z-20 block">
+        <p class="text-gray-800 text-xl font-semibold mb-2 w-full">{{ $post['name'] }}</p>
         <span class="texto-verde font-semibold text-lg capitalize">{{ $post['purpose'] }}</span>
         <p class="mt-3"><i class="fa-solid fa-location-dot text-gray-700 mr-1"></i>
             {{ $post['location']['municipio'] . ' (' . $post['location']['departamento'] . ')' }}</p>
 
-    </div>
+    </a>
 </div>
