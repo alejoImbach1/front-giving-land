@@ -60,7 +60,7 @@ class Image extends Component
 
     public function delete()
     {
-        $response = Http::authtoken()->post('/profile');
+        $response = Http::authtoken()->put('/profile/delete-image');
 
         Utility::viewAlert('warning', $response->object()->message);
 

@@ -25,7 +25,7 @@ class RegisterController extends Controller
     public function attempt(RegisterRequest $request)
     {
         // dd($request->validated());
-        $response = Http::backapi()->post('/register', $request->validated());
+        $response = Http::backapi()->post('/users', $request->validated());
 
         if ($response->unprocessableEntity()) {
             return back()->withErrors(['email' => 'El correo electrónico ya existe'])->onlyInput('email');
@@ -35,8 +35,8 @@ class RegisterController extends Controller
             return to_route('register');
         }
 
-        // Auth::login(User::find($response->json()['user']['id']));
         session(['auth_token' => $response->json()['auth_token']]);
+        session(['auth_user' => $response->json()['user']]);
         Utility::viewAlert('success', 'Se registró y se inició sesión.');
         return to_route('home');
     }

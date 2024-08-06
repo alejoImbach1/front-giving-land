@@ -45,7 +45,7 @@
         <form class="bg-gris-claro rounded-lg border-2 p-2" wire:submit='store()'>
             <div class="grid gap-x-2 mb-4" style="grid-template-columns: 2fr 1fr">
                 <div class="">
-                    @if ($createSelectedSocialMedia == 1)
+                    @if ($createSelectedSocialMediaId == 1)
                         <x-input-all class="w-full" wire:input='onCreateChange' wire:model="inputNumber"
                             name='inputNumber' inputmode="numeric" maxlength="10" type="text" placeholder="Número" />
                     @else
@@ -55,10 +55,10 @@
                     @endif
                 </div>
                 <select class="outline-none bg-transparent cursor-pointer capitalize"
-                    wire:model='createSelectedSocialMedia' wire:input='onCreateChange'>
+                    wire:model='createSelectedSocialMediaId' wire:input='onCreateChange'>
                     <option value="0" disabled>Seleccione</option>
                     @foreach ($createSocialMedia as $element)
-                        <option class="capitalize" value="{{ $element['id'] }}" @selected($createSelectedSocialMedia == $element['id'])>
+                        <option class="capitalize" value="{{ $element['id'] }}" @selected($createSelectedSocialMediaId == $element['id'])>
                             {{ $element['name'] }}
                         </option>
                     @endforeach
