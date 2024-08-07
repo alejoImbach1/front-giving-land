@@ -15,7 +15,7 @@
                 <x-input-all type="password" name="password" label-text="Contraseña:"/>
             </div>
             <div class="text-right mb-10">
-                <a href=""
+                <a href="{{route('forgot_password')}}"
                     class="texto-gris hover-oscuro">
                     ¿Olvidaste la contraseña?
                 </a>

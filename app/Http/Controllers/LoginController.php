@@ -9,6 +9,7 @@ use App\MyOwn\classes\Utility;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\URL;
 
 class LoginController extends Controller implements HasMiddleware
 {
