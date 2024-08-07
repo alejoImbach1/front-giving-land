@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\MyOwn\classes\Utility;
 use Illuminate\Support\Facades\Http;
 
 class ProfileController extends Controller
@@ -11,6 +11,7 @@ class ProfileController extends Controller
     {
         $response = Http::backapi()->get('/users/' . $username, ['included' => 'profile']);
         if ($response->failed()) {
+            Utility::viewAlert('warning', $response->object()->message);
             return to_route('home');
         }
 
@@ -26,23 +27,24 @@ class ProfileController extends Controller
             'sort' => '-created_at'
         ])->json();
 
-        $favorites = session()->has('auth_token') ?
+        $favorites = Utility::checkAuth() ?
             Http::backapi()->get('/users/' . session('auth_user')['username'], ['included' => 'favorites'])->json()['favorites'] : null;
 
         $profileImageUrl = !$profile['google_avatar']
             ? env('back_public_storage') . '/' . $profile['image']['url']
             : $profile['image']['url'];
 
-        return view('sections.profile.show', compact('user', 'profile', 'posts', 'profileImageUrl' ,'favorites'));
+        return view('sections.profile.show', compact('user', 'profile', 'posts', 'profileImageUrl', 'favorites'));
     }
 
-    public function edit(){
-        $profile = Http::backapi()->get('/profiles/' . session('auth_user')['profile']['id'],[
+    public function edit()
+    {
+        $profile = Http::backapi()->get('/profiles/' . session('auth_user')['profile']['id'], [
             'included' => 'image,socialMedia.image,contactInformation'
         ])->json();
 
-        $allSocialMedia = Http::backapi()->get('/social-media',['included' => 'image'])->json();
+        $allSocialMedia = Http::backapi()->get('/social-media', ['included' => 'image'])->json();
         // dd($profile);
-        return view('sections.profile.edit',compact('profile','allSocialMedia'));
+        return view('sections.profile.edit', compact('profile', 'allSocialMedia'));
     }
 }

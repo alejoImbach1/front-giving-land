@@ -1,16 +1,15 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\GoogleAuthController;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SecurityPrivacy;
 use App\Http\Middleware\BackAuth;
 use App\Http\Middleware\BackGuest;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/all', function () {
@@ -31,16 +30,11 @@ Route::get('/', function () {
 })->name('home');
 
 
-Route::controller(LoginController::class)->group(function () {
+Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'index')->name('login');
     Route::post('/login', 'attempt')->name('login.attempt');
+    Route::post('/logout','logout')->name('logout');
 });
-
-Route::post('/logout', function () {
-    Http::authtoken()->get('/logout');
-    session()->invalidate();
-    return to_route('home');
-})->middleware(BackAuth::class)->name('logout');
 
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'index')->name('register');

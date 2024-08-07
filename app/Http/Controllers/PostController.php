@@ -14,7 +14,7 @@ class PostController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(BackAuth::class, only: ['create', 'edit', 'destroy']),
+            new Middleware(BackAuth::class, except: ['show']),
         ];
     }
 
@@ -25,13 +25,13 @@ class PostController extends Controller implements HasMiddleware
         ]);
 
         if ($response->failed()) {
-            Utility::viewAlert('danger', $response->object()->message);
+            Utility::viewAlert('warning', $response->object()->message);
             return to_route('home');
         }
 
         $post = $response->json();
 
-        $favorites = session()->has('auth_token') ?
+        $favorites = Utility::checkAuth() ?
             Http::backapi()->get('/users/' . session('auth_user')['username'], ['included' => 'favorites'])->json()['favorites'] : null;
 
         return view('sections.posts.show', compact('post', 'favorites'));
@@ -49,21 +49,28 @@ class PostController extends Controller implements HasMiddleware
             'included' => 'images,location,category'
         ]);
         if ($response->failed() || empty($response->json()) || !$response->collect()->where('id', $id)->first()) {
-            Utility::viewAlert('danger', 'not found');
+            Utility::viewAlert('warning', 'no encontrado');
             return to_route('home');
         };
+
         $post = $response->collect()->where('id', $id)->first();
+
         return view('sections.posts.edit', compact('post'));
     }
 
     public function destroy(string $id)
     {
         $response = Http::authtoken()->delete('/posts/' . $id);
+
+        $message = $response->object()->message;
+        
         if ($response->failed()) {
-            Utility::viewAlert('danger', $response->object()->message);
+            Utility::viewAlert('warning', $message);
             return to_route('home');
         }
-        Utility::viewAlert('success', $response->object()->message);
+
+        Utility::viewAlert('success', $message);
+
         return to_route('profiles.show', session('auth_user')['username']);
     }
 }

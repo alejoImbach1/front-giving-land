@@ -141,24 +141,6 @@ class CreateEdit extends Component
             ]
         );
 
-        // $user = auth()->user();
-        // $post = $user->posts()->updateOrCreate($this->only('id'), $this->only(['name', 'purpose', 'expected_item', 'description', 'location_id', 'category_id']));
-        // foreach ($this->newImagesNames as $imageName) {
-        //     $post->images()->create(['url' => $imageName]);
-        //     Storage::move('public/livewire-tmp/' . $imageName, 'public/posts_images/' . $user->username . '/' . $imageName);
-        // }
-        // if ($this->id !== null) {
-        //     $currentPostImages = Post::find($this->id)->images;
-        //     foreach ($this->deletedInitImagesIds as $imageName) {
-        //         $currentPostImages->where('url', $imageName)->first()->delete();
-        //         Storage::delete('public/posts_images/' . $user->username . '/' . $imageName);
-        //     }
-        // } else {
-        //     $post->update(['user_post_index' => (count($user->posts) > 1) ? ($user->posts[count($user->posts) - 2]->user_post_index + 1) : 0]);
-        // }
-        // Storage::deleteDirectory('public/livewire-tmp');
-        // Utility::sendAlert('success', ($this->id) ? 'Se editó correctamente' : 'Se publicó el artículo');
-        // return to_route('profile.show', $user->username);
         $authUser = session('auth_user');
         $requestData = $this->only(['name', 'purpose', 'expected_item', 'description', 'location_id', 'category_id']);
         $multipart = [];
@@ -183,9 +165,6 @@ class CreateEdit extends Component
         if(!empty($multipart)){
             Http::authtoken()->attach($multipart)->post('post/new-images', ['post_id' => $this->id]);
         }
-        // dd($newImagesResponse->json());
-
-        // dd($updateResponse->json());
         Utility::viewAlert($updateResponse->successful() ? 'success' : 'danger', $updateResponse->object()->message);
         Storage::deleteDirectory('public/livewire-tmp');
         return to_route('profiles.show', $authUser['username']);

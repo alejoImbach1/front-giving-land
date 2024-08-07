@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\BackAuth;
-use App\Http\Middleware\BackGuest;
 use App\Http\Requests\LoginRequest;
 use App\MyOwn\classes\Utility;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\URL;
 
-class LoginController extends Controller implements HasMiddleware
+class AuthController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
         return [
-            BackGuest::class
+            new Middleware(BackAuth::class, only: ['logout']),
         ];
     }
 
@@ -29,20 +28,29 @@ class LoginController extends Controller implements HasMiddleware
     {
         $response = Http::backapi()->post('/login', $request->validated());
 
-        if ($response->unauthorized()) {
-            return back()->withErrors(['email' => 'El correo o la contraseña son incorrectos'])->onlyInput('email');
-        }
-
+        $message = $response->object()->message;
+        
         if ($response->failed()) {
-            return to_route('login');
+            return back()->withErrors(['email' => $message])->onlyInput('email');
         }
         // Auth::login(User::find($response->json()['user']['id']));
         session(['auth_token' => $response->json()['auth_token']]);
+
         $auth_user = Http::authtoken()->get('/user', [
             'included' => 'profile'
         ])->json();
+
         session(compact('auth_user'));
-        Utility::viewAlert('success', 'Se inició sesión.');
+
+        Utility::viewAlert('success', $message);
+
+        return to_route('home');
+    }
+
+    public function logout () {
+        $response = Http::authtoken()->get('/logout');
+        session()->invalidate();
+        Utility::viewAlert('success', $response->object()->message);
         return to_route('home');
     }
 }

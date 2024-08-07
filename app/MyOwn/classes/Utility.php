@@ -16,18 +16,9 @@ class Utility
         ]);
     }
 
-    // public static function sendVerificationCode(string $email): string
-    // {
-    //     $permitted_chars = '123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    //     $code = substr(str_shuffle($permitted_chars), 0, 6);
-    //     session(['plain' => $code]);
-    //     // Mail::to($email)->send(new ValidationMailable($code));
-    //     return Hash::make($code);
-    // }
-
     public static function checkAuth(): bool
     {
-        return Http::authtoken()->get('/user')->successful();
+        return session()->has('auth_token');
     }
 
 }

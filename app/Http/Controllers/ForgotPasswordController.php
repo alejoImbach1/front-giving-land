@@ -20,13 +20,15 @@ class ForgotPasswordController extends Controller
         ]);
         $response = Http::backapi()->post('forgot-password', $request->only('email'));
 
-        $message = $response->object()->message;
+        $responseObject = $response->object()->message;
+
+        $message = $responseObject->message;
 
         if($response->failed()){
             return back()->withErrors(['email' => $message]);
         }
 
-        return view('reset-password-test',['url' => $response->object()->reset_url]);
+        return view('reset-password-test',['url' => $responseObject->reset_url]);
 
         Utility::viewAlert('success', $message);
 

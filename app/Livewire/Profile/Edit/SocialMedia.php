@@ -77,30 +77,6 @@ class SocialMedia extends Component
                 'inputUsername' => 'nombre de usuario'
             ]
         );
-        // if ($this->createSelectedSocialMediaId == 1) {
-        //     $this->validate(
-        //         [
-        //             'inputNumber' => 'required|numeric|digits:10'
-        //         ],
-        //         [
-        //             'required' => 'El :attribute es requerido.',
-        //             'numeric' => 'Todo el campo debe ser numérico.',
-        //             'digits:10' => 'El :attribute debe contener :value dígitos.',
-        //         ],
-        //         [
-        //             'inputNumber' => 'número',
-        //         ]
-        //     );
-        // } else {
-        //     $this->validate(
-        //         [
-        //             'inputUsername' => 'required'
-        //         ],
-        //         [
-        //             'required' => 'El link es requerido.',
-        //         ],
-        //     );
-        // }
         $username = ($this->createSelectedSocialMediaId == 1) ? $this->inputNumber : $this->inputUsername;
         $this->createDisplayed = false;
         $response = Http::authtoken()->put('/profile',[

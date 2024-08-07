@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\BackGuest;
 use App\Http\Requests\RegisterRequest;
 use App\MyOwn\classes\Utility;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class RegisterController extends Controller
@@ -24,20 +23,20 @@ class RegisterController extends Controller
 
     public function attempt(RegisterRequest $request)
     {
-        // dd($request->validated());
-        $response = Http::backapi()->post('/users', $request->validated());
+        $response = Http::backapi()->post('/users', $request->all());
 
-        if ($response->unprocessableEntity()) {
-            return back()->withErrors(['email' => 'El correo electrónico ya existe'])->onlyInput('email');
+        $responseObject = $response->object();
+
+        if ($response->failed()) {
+            return back()->withErrors(['email' => $responseObject->message])->onlyInput('name','email');
         }
 
-        if($response->failed()){
-            return to_route('register');
-        }
+        session(['auth_token' => $responseObject->auth_token]);
 
-        session(['auth_token' => $response->json()['auth_token']]);
-        session(['auth_user' => $response->json()['user']]);
-        Utility::viewAlert('success', 'Se registró y se inició sesión.');
+        session(['auth_user' => $responseObject->user]);
+
+        Utility::viewAlert('success', $responseObject->message);
+
         return to_route('home');
     }
 }

@@ -16,23 +16,29 @@ class GoogleAuthController extends Controller
     public function handleCallback()
     {
         $user_google = Socialite::driver('google')->stateless()->user();
-        // dd($user_google->id);
-        $response = Http::backapi()->post('google-login',[
+
+        $response = Http::backapi()->post('google-login', [
             'name' => $user_google->name,
             'email' => $user_google->email,
             'avatar' => $user_google->avatar
         ]);
 
-        if($response->failed()){
+        $responseObject = $response->object();
+
+        Utility::viewAlert($response->successful() ? 'success' : 'warning', $responseObject->message);
+
+        if ($response->failed()) {
             return to_route('login');
         }
 
-        session(['auth_token' => $response->json()['auth_token']]);
+        session(['auth_token' => $responseObject->auth_token]);
+
         $auth_user = Http::authtoken()->get('/user', [
             'included' => 'profile'
         ])->json();
+
         session(compact('auth_user'));
-        Utility::viewAlert('success', 'Se ingresó con google.');
+
         return to_route('home');
     }
 }
