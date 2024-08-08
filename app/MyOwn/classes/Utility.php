@@ -29,4 +29,15 @@ class Utility
             ? env('back_public_storage') . '/' . $profile['image']['url']
             : $profile['image']['url'];
     }
+
+    public static function refreshAuthUser(): bool
+    {
+        $response = Http::authtoken()->get('/user', ['included' => 'profile']);
+
+        if ($response->successful()) {
+            session(['auth_user' => $response->json()]);
+        }
+
+        return $response->successful();
+    }
 }

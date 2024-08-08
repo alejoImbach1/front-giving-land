@@ -8,6 +8,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SecurityPrivacy;
+use App\Http\Controllers\SecurityPrivacyController;
 use App\Http\Middleware\BackAuth;
 use App\Http\Middleware\BackGuest;
 use Illuminate\Support\Facades\Route;
@@ -33,7 +34,7 @@ Route::get('/', function () {
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'index')->name('login');
     Route::post('/login', 'attempt')->name('login.attempt');
-    Route::post('/logout','logout')->name('logout');
+    Route::post('/logout', 'logout')->name('logout');
 });
 
 Route::controller(RegisterController::class)->group(function () {
@@ -49,17 +50,20 @@ Route::controller(GoogleAuthController::class)->group(function () {
 Route::controller(ForgotPasswordController::class)->group(function () {
     Route::get('/forgot-password', 'index')->name('forgot_password');
     Route::post('/forgot-password', 'sendEmail')->name('forgot_password.send_email');
-    Route::get('/reset-password/{token}','newPasswordForm');
-    Route::post('/reset-password','updatePassword')->name('forgot_password.update_password');
+    Route::get('/reset-password/{token}', 'newPasswordForm');
+    Route::post('/reset-password', 'updatePassword')->name('forgot_password.update_password');
 })->middleware(BackGuest::class);
 
 Route::resource('posts', PostController::class)->only('show', 'create', 'edit');
 
-Route::singleton('profile', ProfileController::class)->only('edit')->middleware(BackAuth::class);
+Route::middleware(BackAuth::class)->group(function () {
+    Route::singleton('profile', ProfileController::class)->only('edit');
 
-Route::resource('favorites', FavoriteController::class)->only('index')->middleware(BackAuth::class);
+    Route::resource('favorites', FavoriteController::class)->only('index');
 
-Route::resource('security-privacy', SecurityPrivacy::class)->only('index');
+    Route::resource('security-privacy', SecurityPrivacyController::class)->only('index');
 
+    Route::get('account-deletion', [SecurityPrivacyController::class, 'accountDeletion'])->name('security-privacy.account-deletion');
+});
 
 Route::get('{username}', [ProfileController::class, 'show'])->name('profiles.show');

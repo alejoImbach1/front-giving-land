@@ -25,7 +25,6 @@ class RegisterRequest extends FormRequest
             'name' => 'required|max:100|regex:/^[\p{L}\p{N}\sñÑáéíóúÁÉÍÓÚüÜ]+$/u',
             'email' => 'required|email|unique:App\Models\User,email',
             'password' => 'required|confirmed|regex:/^(?=.*\d).{6,14}$/',
-            'password_confirmation' => ''
         ];
     }
 }

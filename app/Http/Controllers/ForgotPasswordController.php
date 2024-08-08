@@ -20,7 +20,7 @@ class ForgotPasswordController extends Controller
         ]);
         $response = Http::backapi()->post('forgot-password', $request->only('email'));
 
-        $responseObject = $response->object()->message;
+        $responseObject = $response->object();
 
         $message = $responseObject->message;
 

@@ -23,7 +23,7 @@ class RegisterController extends Controller
 
     public function attempt(RegisterRequest $request)
     {
-        $response = Http::backapi()->post('/users', $request->all());
+        $response = Http::backapi()->post('/users', $request->validated());
 
         $responseObject = $response->object();
 
@@ -31,9 +31,11 @@ class RegisterController extends Controller
             return back()->withErrors(['email' => $responseObject->message])->onlyInput('name','email');
         }
 
+        // dd($response->json());
+
         session(['auth_token' => $responseObject->auth_token]);
 
-        session(['auth_user' => $responseObject->user]);
+        session(['auth_user' => $response->json()['user']]);
 
         Utility::viewAlert('success', $responseObject->message);
 

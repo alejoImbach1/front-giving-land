@@ -6,14 +6,15 @@
     <div class="menu-opciones-lateral hidden md:block">
         <a class="inline-block boton-base verde-blanco text-lg" href="{{ route('posts.create') }}">Publicar artículo</a>
         <hr class="my-4">
-        <a @class([
+        {{-- <a @class([
             'hover-gris-claro p-2 rounded flex items-center w-full',
             'border-l-4 border-green-700' => request('username') == session('auth_user')['username'],
         ])
             href="{{ route('profiles.show', session('auth_user')['username']) }}">
             <img class="size-8 redondo mr-2" src="{{ $profileImageUrl }}">
             <h4>{{ session('auth_user')['name'] }}</h4>
-        </a>
+        </a> --}}
+        <livewire:profile.nav.profile-link :$profileImageUrl/>
         @owner($username)
             <a @class([
                 'hover-gris-claro p-2 rounded flex items-center w-full',
