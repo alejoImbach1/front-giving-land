@@ -1,4 +1,5 @@
 <?php
+
 namespace App\MyOwn\classes;
 
 use App\Models\User;
@@ -9,8 +10,9 @@ use Illuminate\Support\Str;
 
 class Utility
 {
-    public static function viewAlert(string $type,string $message){
-        session()->flash('alert',[
+    public static function viewAlert(string $type, string $message)
+    {
+        session()->flash('alert', [
             'type' => $type,
             'message' => $message
         ]);
@@ -21,4 +23,10 @@ class Utility
         return session()->has('auth_token');
     }
 
+    public static function getAuthProfileImageUrl(array $profile): string
+    {
+        return !$profile['google_avatar']
+            ? env('back_public_storage') . '/' . $profile['image']['url']
+            : $profile['image']['url'];
+    }
 }

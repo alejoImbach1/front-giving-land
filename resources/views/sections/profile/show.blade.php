@@ -1,4 +1,4 @@
-<x-profile.index :$profile :$profileImageUrl>
+<x-profile.index :$profileImageUrl>
     <div @class(['w-full', 'max-w-2xl' => session()->has('auth_token')])>
         <div class="max-w-sm min-w-80 md:max-w-xl mx-auto">
 

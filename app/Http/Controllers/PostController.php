@@ -57,20 +57,4 @@ class PostController extends Controller implements HasMiddleware
 
         return view('sections.posts.edit', compact('post'));
     }
-
-    public function destroy(string $id)
-    {
-        $response = Http::authtoken()->delete('/posts/' . $id);
-
-        $message = $response->object()->message;
-        
-        if ($response->failed()) {
-            Utility::viewAlert('warning', $message);
-            return to_route('home');
-        }
-
-        Utility::viewAlert('success', $message);
-
-        return to_route('profiles.show', session('auth_user')['username']);
-    }
 }

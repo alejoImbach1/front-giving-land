@@ -53,11 +53,11 @@ Route::controller(ForgotPasswordController::class)->group(function () {
     Route::post('/reset-password','updatePassword')->name('forgot_password.update_password');
 })->middleware(BackGuest::class);
 
-Route::resource('posts', PostController::class)->except('store', 'update', 'index');
+Route::resource('posts', PostController::class)->only('show', 'create', 'edit');
 
 Route::singleton('profile', ProfileController::class)->only('edit')->middleware(BackAuth::class);
 
-Route::resource('favorites', FavoriteController::class)->only('index');
+Route::resource('favorites', FavoriteController::class)->only('index')->middleware(BackAuth::class);
 
 Route::resource('security-privacy', SecurityPrivacy::class)->only('index');
 

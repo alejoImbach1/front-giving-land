@@ -1,4 +1,4 @@
-@props(['profile','profileImageUrl'])
+@props(['profileImageUrl'])
 @backauth
     @php
         $username = request('username') ? request('username') : session('auth_user')['username'];

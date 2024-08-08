@@ -50,14 +50,9 @@
         <div class="dropdown relative z-30">
             <i
                 class="fa-solid fa-ellipsis absolute right-0 top-1 text-lg leading-none bg-gray-300 rounded-md px-2 cursor-pointer dropdown-button"></i>
-            <div class="dropdown-menu absolute right-0 my-2 w-56 top-full z-30 rounded-md bg-white shadow-lg hidden">
+            <div class="dropdown-menu absolute right-0 my-2 w-24 top-full z-30 rounded-md bg-white shadow-lg hidden">
                 <div class="py-1">
                     @owner($username)
-                        {{-- <a href="{{ route('posts.edit', $post['id']) }}"
-                        class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">Editar</a>
-                        <hr>
-                        <button class="text-gray-700 w-full text-start px-4 py-2 text-sm hover:bg-gray-100"
-                            wire:click='displayDialogDestroy()'>Eliminar</button> --}}
                         <a href="{{ route('posts.edit', $post['id']) }}"
                             class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100">Editar</a>
                         <hr>

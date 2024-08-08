@@ -30,9 +30,7 @@ class ProfileController extends Controller
         $favorites = Utility::checkAuth() ?
             Http::backapi()->get('/users/' . session('auth_user')['username'], ['included' => 'favorites'])->json()['favorites'] : null;
 
-        $profileImageUrl = !$profile['google_avatar']
-            ? env('back_public_storage') . '/' . $profile['image']['url']
-            : $profile['image']['url'];
+        $profileImageUrl = Utility::getAuthProfileImageUrl($profile);
 
         return view('sections.profile.show', compact('user', 'profile', 'posts', 'profileImageUrl', 'favorites'));
     }

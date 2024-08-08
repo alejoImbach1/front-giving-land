@@ -1,15 +1,9 @@
-{{-- @php
-    // $response = Illuminate\Support\Facades\Http::authtoken()->get('/user',['included' => 'profile.image']);
-
-    // $authUser = $response->successful() ? $response->object() : null;
-@endphp --}}
-
 @backauth
     @php
         $authUser = session('auth_user');
-        $profile = Http::backapi()->get('/profiles/' . $authUser['profile']['id'],['included' => 'image']);
+        $profile = Http::backapi()->get('/profiles/' . $authUser['profile']['id'],['included' => 'image'])->json();
         // dd($profile);
-        $imageUrl = !$profile['google_avatar'] ? env('back_public_storage') . '/' . $profile['image']['url'] : $profile['image']['url'];
+        $imageUrl = App\MyOwn\classes\Utility::getAuthProfileImageUrl($profile);
         // dd($imageUrl);
     @endphp
 @endbackauth

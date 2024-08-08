@@ -21,7 +21,7 @@ class Image extends Component
     public function mount()
     {
         $this->photo = null;
-        $this->initImageUrl = !$this->profile['google_avatar'] ? env('back_public_storage') . '/' . $this->profile['image']['url'] : $this->profile['image']['url'];
+        $this->initImageUrl = Utility::getAuthProfileImageUrl($this->profile);
         $this->editDisplayed = false;
         $this->deleteDisplayed = false;
         $this->submitDisabled = true;
